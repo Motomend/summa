@@ -29,11 +29,16 @@ body {
   height: 60px;
   font-size: 18px;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.2s ease-in-out, background-color 0.3s;
 }
 
 .number-btn:hover {
   transform: scale(1.1);
+}
+
+.number-btn.selected {
+  background-color: #ff3333; /* Highlighted color */
+  box-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
 }
 
 #generate-btn {
@@ -49,6 +54,13 @@ body {
 #generate-btn:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+#selected-number {
+  font-size: 24px;
+  font-weight: bold;
+  color: #007bff;
+  margin: 15px 0;
 }
 
 #result {
