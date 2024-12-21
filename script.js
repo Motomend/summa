@@ -1,5 +1,6 @@
 const numberButtons = document.querySelectorAll('.number-btn');
 const generateButton = document.getElementById('generate-btn');
+const selectedNumberDisplay = document.getElementById('selected-number');
 const resultDiv = document.getElementById('result');
 
 let selectedNumber = null;
@@ -7,12 +8,17 @@ let selectedNumber = null;
 // Event listener for number buttons
 numberButtons.forEach((btn) => {
   btn.addEventListener('click', () => {
-    // Highlight selected number
+    // Reset previous selection
     numberButtons.forEach((b) => b.classList.remove('selected'));
+    
+    // Highlight the current selection
     btn.classList.add('selected');
-
-    // Store selected number
+    
+    // Update selected number
     selectedNumber = parseInt(btn.getAttribute('data-number'));
+    
+    // Update UI
+    selectedNumberDisplay.textContent = `Selected Number: ${selectedNumber}`;
     generateButton.disabled = false; // Enable generate button
   });
 });
@@ -21,7 +27,10 @@ numberButtons.forEach((btn) => {
 generateButton.addEventListener('click', () => {
   if (selectedNumber) {
     const combination = generateCombination(selectedNumber);
-    resultDiv.textContent = `Combination: ${combination.join(', ')}`;
+    resultDiv.innerHTML = `
+      <p>Your selected number: ${selectedNumber}</p>
+      <p>Generated Combination: <strong>${combination.join(', ')}</strong></p>
+    `;
   }
 });
 
@@ -32,12 +41,3 @@ function generateCombination(sum) {
   const num3 = sum - num1 - num2;
   return [num1, num2, num3];
 }
-generateButton.addEventListener('click', () => {
-  if (selectedNumber) {
-    const combination = generateCombination(selectedNumber);
-    resultDiv.innerHTML = `
-      <p>Your selected number: ${selectedNumber}</p>
-      <p>Generated Combination: <strong>${combination.join(', ')}</strong></p>
-    `;
-  }
-});
