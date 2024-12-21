@@ -4,12 +4,83 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>C4</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .number-options {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+
+    .number-btn {
+      background-color: #ff6666;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out, background-color 0.3s;
+    }
+
+    .number-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .number-btn.selected {
+      background-color: #ff3333; /* Highlighted color */
+      box-shadow: 0 0 15px rgba(255, 51, 51, 0.7);
+    }
+
+    #generate-btn {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #generate-btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #selected-number {
+      font-size: 24px;
+      font-weight: bold;
+      color: #007bff;
+      margin: 15px 0;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>C4</h1>
-    <p>Select a number:</p>
+    <p id="selected-number">No number selected</p>
     <div class="number-options">
       <button class="number-btn" data-number="7">7</button>
       <button class="number-btn" data-number="8">8</button>
@@ -18,6 +89,50 @@
     <button id="generate-btn" disabled>Generate</button>
     <div id="result"></div>
   </div>
-  <script src="script.js"></script>
+  <script>
+    const numberButtons = document.querySelectorAll('.number-btn');
+    const generateButton = document.getElementById('generate-btn');
+    const selectedNumberDisplay = document.getElementById('selected-number');
+    const resultDiv = document.getElementById('result');
+
+    let selectedNumber = null;
+
+    // Event listener for number buttons
+    numberButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        // Reset previous selection
+        numberButtons.forEach((b) => b.classList.remove('selected'));
+
+        // Highlight the current selection
+        btn.classList.add('selected');
+
+        // Update selected number
+        selectedNumber = parseInt(btn.getAttribute('data-number'));
+
+        // Update UI
+        selectedNumberDisplay.textContent = `Selected Number: ${selectedNumber}`;
+        generateButton.disabled = false; // Enable generate button
+      });
+    });
+
+    // Event listener for generate button
+    generateButton.addEventListener('click', () => {
+      if (selectedNumber) {
+        const combination = generateCombination(selectedNumber);
+        resultDiv.innerHTML = `
+          <p>Your selected number: ${selectedNumber}</p>
+          <p>Generated Combination: <strong>${combination.join(', ')}</strong></p>
+        `;
+      }
+    });
+
+    // Function to generate three random numbers with a given sum
+    function generateCombination(sum) {
+      const num1 = Math.floor(Math.random() * (sum - 2)) + 1;
+      const num2 = Math.floor(Math.random() * (sum - num1 - 1)) + 1;
+      const num3 = sum - num1 - num2;
+      return [num1, num2, num3];
+    }
+  </script>
 </body>
 </html>
